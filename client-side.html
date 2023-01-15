@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aroma's Cafe | Menu</title>
+    
+    <!-- Page Icon -->
+    <link rel="Micosoft icon" href="assets/images/MIT LOGO.png">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" 
+          integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" 
+          crossorigin="anonymous" />
+
+    <!-- Style Sheets -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/utilities.css">
+    <link rel="stylesheet" href="assets/css/mobile.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+
+    <!-- Firebase Connectivity Using CDN -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-database.js"></script>
+
+    <!-- Sweet Alert Pop Modal -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    
+    <!-- NavBar -->
+    <header class="navbar">
+        <div class="container flex text-center jc-ai-center">
+            <!-- Left Navigation -->
+            <div class="site-title flex align-item-center">
+                <div>
+                    <a href="index.html"><h1><span class="clr-red">Aroma's</span> <span class="clr-green">Cafe</span></h1></a>
+                </div>
+                <!-- Toggle Bars -->
+                <div class="toggle-bars mybar">
+                    <div class="bars bar-1"></div>
+                    <div class="bars bar-2"></div>
+                    <div class="bars bar-3"></div>
+                </div>
+            </div>
+            <!-- Right Navigation -->
+            <nav class="site-nav flex left-nav align-item-center">                
+                <ul class="flex">
+                    <li><a href="client-side.html"><i class="fas fa-cocktail"></i> Menu</a></li>
+                    <li><a href="user-orders.html"><i class="fas fa-coins"></i> Your Orders</a></li>
+                    <button  class="btn" id="userlogout">Log Out</button>
+                    <!-- Cart Icon -->
+                    <a class="flex" id="cart-btn">
+                        <i class="fas fa-shopping-cart"></i>
+                        <p id="cart-values">0</p>
+                    </a>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Mobile Navbar -->
+    <header class="mob-navbar">
+        <nav class="nav container">
+            <ul class="mob-ul">
+                <li><a href="client-side.html">Menu</a></li>
+                <li><a href="user-orders.html">My Orders</a></li>
+                <button  class="btn" id="userlogout">Log Out</button>
+                <!-- Cart Icon -->
+                <a class="flex" id="cart-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <p id="cart-values">6</p>
+                </a>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Cart -->
+    <section class="cart-overlay">
+        <div class="cart-innerlay">
+            <!-- Upper Side -->
+            <header class="cart-title text-center md">
+                <div>Your Cart</div>
+                <div>
+                    <i class="fas fa-times" 
+                       onclick="cartOverlay.classList.remove('show');
+                       cartInnerlay.classList.remove('showCart');">
+                    </i>
+                </div>
+            </header>
+            <!-- Cart Item Container -->
+            <div class="cart-items-container py-2">
+                <!-- Cart Items added to cart -->
+   
+            </div>
+            <hr class="py-1">
+            <!-- Footer Side  -->
+            <div class="cart-footer text-center sm">
+                <div>Your Total : &#8377;<span class="cart-total sm">0</span></div>
+                <div class="my-1">
+                    <button class="clear-cart">Clear Cart</button>
+                    <button class="check-out">Order Now</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Showcase -->
+    <!-- Hero -->
+    <section class="menu-hero">
+        <div class="banner">
+            <h1 class="banner-title lg">Our Menu</h1>
+            <button class="banner-btn btn">order now</button>
+        </div>
+    </section>
+
+    <!-- Menu -->
+    <section class="menu" style="margin-bottom: 5rem;">
+        <main class="container grid grid-1">
+            <!-- Title -->
+           <div class="title text-center">
+               <h2 class="lg my-2">Filter By Category</h2>
+                <!-- Filter Buttons -->
+                <div class="btn-container grid grid-4">
+                    <button id="menu-filter" class="filter-btn btn current" type="button" data-id="all">All</button>
+                    <button id="menu-filter" class="filter-btn btn" type="button" data-id="Burger">Burger</button>
+                    <button id="menu-filter" class="filter-btn btn" type="button" data-id="Sandwitch">Sandwich</button>
+                    <button id="menu-filter" class="filter-btn btn" type="button" data-id="Fries">Fries</button>
+                    <button id="menu-filter" class="filter-btn btn fv" type="button" data-id="Maggie">Maggie</button>
+                    <button id="menu-filter" class="filter-btn btn" type="button" data-id="Beverages">Beverages</button>
+                    <button id="menu-filter" class="filter-btn btn" type="button" data-id="Pasta">Pasta</button>
+                </div>
+           </div>
+           <hr>
+           <!-- Menu Items -->
+           <div class="menu-section grid grid-3">
+               <!-- Menu Item -->
+               <article class="menu-item">
+                <img src="assets/images/burger.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Double Cheese Potato Burger</h2>
+                    <div class="item-category">Burger</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>220 - 280 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹45</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="1">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/sandwich1.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Cheese Sandwitch</h2>
+                    <div class="item-category">Sandwitch</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>250 - 300 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹45</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="2">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/s2.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Veg Club Sandwitch</h2>
+                    <div class="item-category">Sandwitch</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>320 - 400 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹60</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="3">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/sandwich2.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Cheese Masala Sandwitch</h2>
+                    <div class="item-category">Sandwitch</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>250 - 300 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹45</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="4">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/schez-sandwitch.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Veg Schezuan Sandwitch</h2>
+                    <div class="item-category">Sandwitch</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>230 - 285 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹45</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="5">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/maggie.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Masala Maggie</h2>
+                    <div class="item-category">Maggie</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>150 - 280 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹25</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="6">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/maggie-s.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Schezuan Maggie</h2>
+                    <div class="item-category">Maggie</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>165 - 225 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹30</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="7">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/veg-maggie.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Veg Maggie</h2>
+                    <div class="item-category">Maggie</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>170 - 220 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹30</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="8">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/garlic-maggie.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Cheese Garlic Maggie</h2>
+                    <div class="item-category">Maggie</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>190 - 230 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹40</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="9">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/cheese-maggie.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Cheese Veg Maggie</h2>
+                    <div class="item-category">Maggie</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>175 - 235 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹45</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="10">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/frenchfries.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Masala Fries</h2>
+                    <div class="item-category">Fries</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>120 - 185 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹35</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="11">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/shezuan.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Schezuan Fries</h2>
+                    <div class="item-category">Fries</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>135 - 210 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹45</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="12">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/cheese-fries.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Cheese Fries</h2>
+                    <div class="item-category">Fries</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>140 - 156 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹40</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="13">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/pasta.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Red Sause Pasta</h2>
+                    <div class="item-category">Pasta</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>241 - 321 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹80</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="14">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/white-pasta.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>White Sause Pasta</h2>
+                    <div class="item-category">Pasta</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>265 - 321 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹80</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="15">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/milk-shake.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Milk Shakes</h2>
+                    <div class="item-category">Beverages</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>155 - 210 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹35</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="16">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/hot-coffee.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Hot Chocolate</h2>
+                    <div class="item-category">Beverages</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>230 - 280 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹35</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="17">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/Aerated-Drinks.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Aerated Drinks</h2>
+                    <div class="item-category">Beverages</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>260 - 365 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹10</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="18">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/cold-coffee.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Cold Coffee</h2>
+                    <div class="item-category">Beverages</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>255 - 360 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹35</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="19">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/coffee.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Coffee</h2>
+                    <div class="item-category">Beverages</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>220 - 265 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹15</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="20">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/tea.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Tea</h2>
+                    <div class="item-category">Beverages</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>155 - 225 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹10</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="21">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/beverage.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Chocolate Frappe</h2>
+                    <div class="item-category">Beverages</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>265 - 355 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹35</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="22">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/puff.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Veg Puff</h2>
+                    <div class="item-category">Bakery</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>260 - 320 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹35</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="23">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/samosa.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Panner Puff</h2>
+                    <div class="item-category">Bakery</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>255 - 390 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹15</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="24">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/panner-puff.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <h2>Khari</h2>
+                    <div class="item-category">Bakery</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>265 - 375 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                <div class="menu-cart-functionality">
+                    <div class="price">₹20</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="25">Add to Cart</button>
+                    </div>
+                </div>
+                </div>
+            </article>
+            <article class="menu-item">
+                <img src="assets/images/noodle-puff.jpg" loading="lazy" alt="Product image">
+                <div class="item-info">
+                <figure>
+                    <div class="menu-cart-functionality">
+                    <div class="price">₹15</div>
+                    <div class="cart-btn-container">
+                        <button class="bag-btn" id="add-to-cart-btn" data-id="26">Add to Cart</button>
+                    </div>
+                </div><h2>Noodle Puff</h2>
+                    <div class="item-category">Bakery</div>
+                    <div class="flex" style="margin-top: 10px;">
+                        <i class="fas fa-fire"></i>
+                        <p>300 - 425 Kcal</p>
+                    </div>
+                </figure>
+                <hr style="margin: 10px 0;">
+                
+                </div>
+            </article>
+           </div>
+       </main>
+   </section>
+   
+    <!-- User Footer -->
+    <footer class="customer-footer" id="user-footer" style="margin-top: 10rem;"><!-- Comes Through JS --></footer>
+
+    <!-- Menu & Admin Stuff -->
+    <script src="assets/js/main.js"></script>
+    <!-- Creative Features -->
+    <script src="assets/js/features.js"></script>
+    <!-- Controls User Stuff -->
+    <script src="assets/js/functioning.js"></script>
+
+</body>
+</html>
